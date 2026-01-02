@@ -1,0 +1,35 @@
+### GET All games
+GET http://localhost:5165/games
+
+### GET Game by ID
+GET http://localhost:5165/games/3
+
+### PUT Update a game
+PUT http://localhost:5165/games/3
+Content-Type: application/json
+
+{
+    "id": 3,
+    "title": "The Legend of Zelda: Breath of the Wild",
+    "genre": "Action-adventure",
+    "price": 49.99,
+    "releaseDate": "2017-03-03",
+    "developer": "Nintendo",
+    "publisher": "Nintendo"
+}
+
+### POST Create a new game
+POST http://localhost:5165/games
+Content-Type: application/json
+
+{
+    "title": "Diablo IV",
+    "genre": "Action RPG",
+    "price": 59.99,
+    "releaseDate": "2023-06-06",
+    "developer": "Blizzard Entertainment",
+    "publisher": "Blizzard Entertainment"
+}
+
+### DELETE a game
+DELETE http://localhost:5165/games/7
