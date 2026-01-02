@@ -24,7 +24,7 @@ Content-Type: application/json
 
 {
     "title": "Diablo IV",
-    "genre": "Action RPG",
+    "genre": "Action",
     "price": 59.99,
     "releaseDate": "2023-06-06",
     "developer": "Blizzard Entertainment",
