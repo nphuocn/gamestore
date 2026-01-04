@@ -11,10 +11,8 @@ public class NewGameDTOValidator : AbstractValidator<NewGameDTO>
             .NotEmpty().WithMessage("Title is required")
             .Length(3, 100).WithMessage("Title must be between 3 and 100 characters");
 
-        RuleFor(x => x.Genre)
-            .NotEmpty().WithMessage("Genre is required")
-            .Must(g => new[] { "RPG", "Action", "Action-Adventure", "Sandbox", "Strategy" }.Contains(g))
-            .WithMessage("Genre must be one of: RPG, Action, Action-Adventure, Sandbox, Strategy");
+        RuleFor(x => x.GenreId)
+            .GreaterThan(0).WithMessage("Genre is required. Genre must be one of: RPG, Action, Action-Adventure, Sandbox, Strategy");
 
         RuleFor(x => x.Price)
             .GreaterThan(0).WithMessage("Price must be greater than 0")

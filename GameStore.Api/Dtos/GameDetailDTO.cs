@@ -1,10 +1,10 @@
 namespace GameStore.Api.Dtos;
 
-public record GameDTO
+public record GameDetailDTO
 (
     int Id,
     string Title,
-    string Genre,
+    int GenreId,
     decimal Price,
     DateTime ReleaseDate,
     string? Developer,
