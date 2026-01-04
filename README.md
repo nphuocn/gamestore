@@ -1,12 +1,20 @@
 # GameStore API
 
-> A minimal example .NET minimal API that serves an in-memory list of games.
+> A .NET minimal API with Entity Framework Core that provides a REST API for managing a games catalog with persistent storage.
 
 ## Overview
 
 - Project: GameStore.Api
-- Tech: .NET 10 minimal API
-- Purpose: Demo CRUD-style endpoints for a small games catalog (in-memory)
+- Tech: .NET 10 minimal API with Entity Framework Core
+- Database: SQLite (default) or SQL Server (configurable)
+- Purpose: CRUD endpoints for a games catalog with database persistence
+
+## Features
+
+- **Data Persistence**: Uses Entity Framework Core with SQLite/SQL Server
+- **Validation**: FluentValidation for DTOs
+- **Database Migrations**: Automated schema creation and updates
+- **RESTful Endpoints**: Standard CRUD operations for games
 
 ## Endpoints
 
@@ -27,20 +35,43 @@ dotnet build
 dotnet run
 ```
 
-The app will start and expose the endpoints; use the `games.http` file in the `GameStore.Api` folder or any HTTP client to exercise the API.
+The app will start on `https://localhost:7122` and expose the endpoints; use the `games.http` file in the `GameStore.Api` folder or any HTTP client to exercise the API.
+
+## Configuration
+
+### Connection Strings
+The app supports multiple database providers configured in `appsettings.json`:
+
+```json
+"ConnectionStrings": {
+  "GameStoreSql": "Server=(localdb)\\mssqllocaldb;Database=GameStoreDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "GameStoreSqlite": "Data Source=GameStore.db"
+}
+```
+
+### Environment-specific Settings
+- **Development**: See `appsettings.Development.json`
+- **Production**: Override via environment variables or `appsettings.Production.json`
 
 ## Testing examples
 
-- Use the included `games.http` file located at `GameStore.Api/games.http` (recommended for VS Code REST client)
-- Or with `curl` (replace host/port with the one the app reports):
+- Use the included `games.http` file located at `GameStore.Api/games.http` (recommended for VS Code REST client extension)
+- Or with `curl`:
 
 ```bash
-curl http://localhost:5000/games
+curl https://localhost:7122/games
 
-curl -X POST http://localhost:5000/games -H "Content-Type: application/json" -d '{"title":"New Game","genre":"Action","price":19.99,"releaseDate":"2026-01-01","developer":"Dev","publisher":"Pub"}'
+curl -X POST https://localhost:7122/games \
+  -H "Content-Type: application/json" \
+  -d '{"title":"New Game","genre":"Action","price":19.99,"releaseDate":"2026-01-01","developer":"Dev","publisher":"Pub"}'
 ```
 
 ## Notes
 
-- Data is stored in-memory in `Program.cs` and resets on restart.
-- The POST endpoint returns a `CreatedAtRoute` response that points to the `GetGameById` route.
+- **Database**: Data persists in SQLite database (`GameStore.db`) or configured database server
+- **Migrations**: Entity Framework migrations are applied automatically on startup via `MigrateDb()`
+- **Validation**: All POST requests are validated using FluentValidation
+- **Response**: The POST endpoint returns `201 Created` with a Location header pointing to the newly created resource
+- **Production Database**: 
+	(`$env:ConnectionStrings__GameStoreSqlite="Data Source={prodcutionname}.db"`) 
+	(`dotnet run`)
