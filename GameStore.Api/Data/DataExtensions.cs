@@ -21,7 +21,7 @@ public static class DataExtensions
             {
                 if (!context.Set<Genre>().Any())
                 {
-                    context.Set<Genre>().AddRange (
+                    context.Set<Genre>().AddRange(
                         new Genre { Name = "Action" },
                         new Genre { Name = "Adventure" },
                         new Genre { Name = "RPG" },
@@ -34,5 +34,20 @@ public static class DataExtensions
                 }
             })
         );
+    }
+
+    public static void AddOriginCORS(this WebApplicationBuilder builder)
+    {
+        var allowedOrigins = builder.Configuration.GetSection("AllowOrigins").Get<string[]>();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.WithOrigins(allowedOrigins ?? Array.Empty<string>())
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
     }
 }
