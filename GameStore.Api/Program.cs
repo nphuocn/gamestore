@@ -10,14 +10,37 @@ var builder = WebApplication.CreateBuilder(args);
 // Register FluentValidation validators
 builder.Services.AddValidatorsFromAssemblyContaining<NewGameDTOValidator>();
 
-// Add GameStore database context
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.AddOriginCORS();
+
+// // Add GameStore database context
 builder.AddGameStoreDb();
 
 var app = builder.Build();
 
-// Apply database migrations
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseAuthentication();
+
+app.UseHttpsRedirection();
+
+app.MapControllers();
+
+app.UseCors();
+
+// // Apply database migrations
 app.MigrateDb();
 
-app.MapGameStoreEndpoints();
+// Map GameStore endpoints can not run 
+// while adding swagger causes errors related to https redirection
+// app.MapGameStoreEndpoints();
 
 app.Run();
